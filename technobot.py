@@ -5,7 +5,7 @@ from telegram.ext import CommandHandler;
 from telegram.ext import MessageHandler;
 from telegram.ext import Filters;
 import telebot
-from telebot import types
+from telebot import types #maxim bog
 
 TG_TOKEN = "1382721347:AAEOh2frbubC8sZD43Y8d9EJ8-u6euLovaM"
 
