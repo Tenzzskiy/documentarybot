@@ -89,7 +89,7 @@ def callback_inline(call):
     elif call.data == "doc":
         keyboard = types.InlineKeyboardMarkup(row_width=2)
         back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        yes_button = types.InlineKeyboardButton( text = "Далее", callback_data="next")
+        next_button = types.InlineKeyboardButton( text = "Далее", callback_data="next")
         keyboard.add(next_button,back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Приступим к выбору документа , который вы хотите оформить", reply_markup=keyboard)
@@ -98,7 +98,7 @@ def callback_inline(call):
         jaloba_button = types.InlineKeyboardButton(text="Жалоба в суд",callback_data="jaloba")
         hodat_button = types.InlineKeyboardButton(text="Ходатайство", callback_data="hodat")
         back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        keyboard.add(jaloba_button,Hodat_button,back_button)
+        keyboard.add(jaloba_button,hodat_button,back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Хорошо, тогда давай приступим к оформлению документов. Выберите документ который хотите оформить", reply_markup=keyboard)
 #    elif call.data == "jaloba":
