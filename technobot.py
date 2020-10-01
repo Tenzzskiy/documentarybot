@@ -15,7 +15,7 @@ bot = telebot.TeleBot("957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU")
 @bot.message_handler(commands=['start', 'help'])
 def handle_start_help(message):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    url_button = types.InlineKeyboardButton(text="Страница моего создателя в ВК", url="https://vk.com/psychocave")
+    cont_button = types.InlineKeyboardButton(text="Получить юридическую помощь", calldack_data="cont")
     nextpage_button = types.InlineKeyboardButton(text="Перейти на следующую страницу", callback_data="next")
     faq_button = types.InlineKeyboardButton(text="Часто задаваемые вопросы (FAQ)", callback_data="faq")
     codex_button = types.InlineKeyboardButton(text="Информация о правонарушениях", callback_data='codex')
@@ -31,7 +31,7 @@ def handle_start_text(message):
     if message.text == "Максон":
         bot.send_message(message.chat.id, "Да\nДа Да\nЭт я)")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    url_button = types.InlineKeyboardButton(text="Страница моего создателя в ВК", url="https://vk.com/psychocave")
+    url_button = types.InlineKeyboardButton(text="Получить юридическую помощь", url="https://vk.com/mirchin")
     nextpage_button = types.InlineKeyboardButton(text="Перейти на следующую страницу", callback_data="next")
     faq_button = types.InlineKeyboardButton(text="Часто задаваемые вопросы (FAQ)", callback_data="faq")
     codex_button = types.InlineKeyboardButton(text="Информация о правонарушениях", callback_data='codex')
@@ -101,9 +101,19 @@ def callback_inline(call):
         keyboard.add(jaloba_button,hodat_button,back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Хорошо, тогда давай приступим к оформлению документов. Выберите документ который хотите оформить", reply_markup=keyboard)
+    elif call.data == "cont":
+        keyboard = types.InlineKeyboardMarkup(row_width=2)
+        url_button = types.InlineKeyboardButton(text="VK contact", url="https://vk.com/mirchin")
+        num_button = types.InlineKeyboardButton(text="Number", callback_data= "num")
+        keyboard.add(url_button,num_button,back_button)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                             text="Способы связи с юристом", reply_markup=keyboard)
+    elif call.data="num":
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                             text="Номер РФ +7(977) 340-61-33", reply_markup=keyboard)
 #    elif call.data == "jaloba":
-        #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                        #      text="", reply_markup=keyboard)
+                                #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                                                #      text="", reply_markup=keyboard)
 #    elif call.data == "hodat":
         #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                         #      text="", reply_markup=keyboard)
