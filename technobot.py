@@ -7,9 +7,9 @@ from telegram.ext import Filters;
 import telebot
 from telebot import types #maxim bog
 
-TG_TOKEN = "1382721347:AAEOh2frbubC8sZD43Y8d9EJ8-u6euLovaM"
+TG_TOKEN = "957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU"
 
-bot = telebot.TeleBot("1382721347:AAEOh2frbubC8sZD43Y8d9EJ8-u6euLovaM")
+bot = telebot.TeleBot("957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU")
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -85,7 +85,21 @@ def callback_inline(call):
                      nalogpravo_button, back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Выберите часть права по которой хотите узнать информацию", reply_markup=keyboard)
-
-
+    elif call.data == "doc":
+        keyboard = types.InlineKeyboardMarkup(row_width=2)
+        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
+        yes_button = types.InlineKeyboardButton( text = "Да", callback_data="yes")
+        keyboad.add(yes_button,back_button)
+    elif call.data == "yes":
+        keyboard = types.InlineKeyboardMarkup(row_width=1)
+        jaloba_button = types.InlineKeyboardButton(text="Жалоба в суд",callback_data="jaloba")
+        hodat_button = types.InlineKeyboardButton(text="Ходатайство", callback_data="hodat")
+        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
+        keyboard.add(jaloba_button,Hodat_button,back_button)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                              text="Хорошо, тогда давай приступим к оформлению документов. Выберите документ который хотите оформить", reply_markup=keyboard)
+#    elif call.data == "jaloba":
+        #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                        #      text="", reply_markup=keyboard)
 if __name__ == '__main__':
     bot.infinity_polling()
