@@ -85,12 +85,15 @@ def callback_inline(call):
                      nalogpravo_button, back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Выберите часть права по которой хотите узнать информацию", reply_markup=keyboard)
+
     elif call.data == "doc":
         keyboard = types.InlineKeyboardMarkup(row_width=2)
         back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        yes_button = types.InlineKeyboardButton( text = "Да", callback_data="yes")
-        keyboad.add(yes_button,back_button)
-    elif call.data == "yes":
+        yes_button = types.InlineKeyboardButton( text = "Далее", callback_data="next")
+        keyboard.add(next_button,back_button)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                              text="Приступим к выбору документа , который вы хотите оформить", reply_markup=keyboard)
+    elif call.data == "next":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
         jaloba_button = types.InlineKeyboardButton(text="Жалоба в суд",callback_data="jaloba")
         hodat_button = types.InlineKeyboardButton(text="Ходатайство", callback_data="hodat")
@@ -101,5 +104,10 @@ def callback_inline(call):
 #    elif call.data == "jaloba":
         #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                         #      text="", reply_markup=keyboard)
+#    elif call.data == "hodat":
+        #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                        #      text="", reply_markup=keyboard)
+
+
 if __name__ == '__main__':
     bot.infinity_polling()
