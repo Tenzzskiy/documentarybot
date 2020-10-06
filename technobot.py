@@ -6,6 +6,7 @@ from telegram.ext import MessageHandler;
 from telegram.ext import Filters;
 import telebot
 from telebot import types #maxim bog
+from docxtpl import DocxTemplate
 
 TG_TOKEN = "957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU"
 
@@ -15,14 +16,13 @@ bot = telebot.TeleBot("957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU")
 @bot.message_handler(commands=['start', 'help'])
 def handle_start_help(message):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    cont_button = types.InlineKeyboardButton(text="Получить юридическую помощь", calldack_data="cont")
-    nextpage_button = types.InlineKeyboardButton(text="Перейти на следующую страницу", callback_data="next")
-    faq_button = types.InlineKeyboardButton(text="Часто задаваемые вопросы (FAQ)", callback_data="faq")
-    codex_button = types.InlineKeyboardButton(text="Информация о правонарушениях", callback_data='codex')
-    doc_button = types.InlineKeyboardButton(text="Составление документов", callback_data='doc')
-    keyboard.add(faq_button, codex_button, doc_button, nextpage_button, url_button)
-    bot.send_message(message.chat.id,
-                     "Добро пожаловать!👋 \nЯ Юрист Ассистент, а ниже представлены команды, которые я могу выполнять 🤖",
+    pravodoc_button = types.InlineKeyboardButton(text="Разборы правовых ситуаций с документами", callback_data='pravodoc')
+    faq_button = types.InlineKeyboardButton(text="Ответы на часто встречаемые ситуации", callback_data="faq")
+    konsultation_button = types.InlineKeyboardButton(text="Запись на консультацию", callback_data='konsultation')
+    business_button = types.InlineKeyboardButton(text="Для бизнеса", callback_data='business')
+    about_button = types.InlineKeyboardButton(text="О боте", callback_data='about')
+    keyboard.add(faq_button, konsultation_button, pravodoc_button, business_button, about_button)
+    bot.send_message(message.chat.id,"Добро пожаловать!👋 \nЯ Юрист Ассистент, а ниже представлены команды, которые я могу выполнять 🤖",
                      reply_markup=keyboard)
 
 
@@ -31,12 +31,12 @@ def handle_start_text(message):
     if message.text == "Максон":
         bot.send_message(message.chat.id, "Да\nДа Да\nЭт я)")
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    url_button = types.InlineKeyboardButton(text="Получить юридическую помощь", url="https://vk.com/mirchin")
-    nextpage_button = types.InlineKeyboardButton(text="Перейти на следующую страницу", callback_data="next")
-    faq_button = types.InlineKeyboardButton(text="Часто задаваемые вопросы (FAQ)", callback_data="faq")
-    codex_button = types.InlineKeyboardButton(text="Информация о правонарушениях", callback_data='codex')
-    doc_button = types.InlineKeyboardButton(text="Составление документов", callback_data='doc')
-    keyboard.add(faq_button, codex_button, doc_button, nextpage_button, url_button)
+    pravodoc_button = types.InlineKeyboardButton(text="Разборы правовых ситуаций с документами", callback_data="pravodoc")
+    faq_button = types.InlineKeyboardButton(text="Ответы на часто встречаемые ситуации", callback_data="faq")
+    konsultation_button = types.InlineKeyboardButton(text="Запись на консультацию", callback_data='konsultation')
+    business_button = types.InlineKeyboardButton(text="Для бизнеса", callback_data='business')
+    about_button = types.InlineKeyboardButton(text="О боте", callback_data='about')
+    keyboard.add(faq_button, konsultation_button, pravodoc_button, business_button, about_button)
     bot.send_message(message.chat.id,
                      "Добро пожаловать!👋 \nЯ Юрист Ассистент, а ниже представлены команды, которые я могу выполнять 🤖",
                      reply_markup=keyboard)
@@ -55,68 +55,34 @@ def callback_inline(call):
         bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Cписок задаваемых вопросов!")
     elif call.data == "back":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
-        url_button = types.InlineKeyboardButton(text="Страница моего создателя в ВК", url="https://vk.com/psychocave")
-        nextpage_button = types.InlineKeyboardButton(text="Перейти на следующую страницу", callback_data="next")
-        faq_button = types.InlineKeyboardButton(text="Часто задаваемые вопросы (FAQ)", callback_data="faq")
-        codex_button = types.InlineKeyboardButton(text="Информация о правонарушениях", callback_data='codex')
-        doc_button = types.InlineKeyboardButton(text="Составление документов", callback_data='doc')
-        keyboard.add(faq_button, codex_button, doc_button, nextpage_button, url_button)
+        pravodoc_button = types.InlineKeyboardButton(text="Разборы правовых ситуаций с документами", callback_data="pravodoc")
+        faq_button = types.InlineKeyboardButton(text="Ответы на часто встречаемые ситуации", callback_data="faq")
+        konsultation_button = types.InlineKeyboardButton(text="Запись на консультацию", callback_data='konsultation')
+        business_button = types.InlineKeyboardButton(text="Для бизнеса", callback_data='business')
+        about_button = types.InlineKeyboardButton(text="О боте", callback_data='about')
+        keyboard.add(faq_button, konsultation_button, pravodoc_button, business_button, about_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Добро пожаловать!👋 \nЯ Юрист Ассистент, а ниже представлены команды, которые я могу выполнять 🤖",
                               reply_markup=keyboard)
-    elif call.data == "qa1":
-        keyboard = types.InlineKeyboardMarkup(row_width=1)
-        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        keyboard.add(back_button)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                              text="Вам могут предъявить штраф, а так же могут забрать в участок.",
-                              reply_markup=keyboard)
-    elif call.data == "codex":
-        keyboard = types.InlineKeyboardMarkup(row_width=2)
-        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        amdpravo_button = types.InlineKeyboardButton(text="Административное право", callback_data="adm")
-        ugpravo_button = types.InlineKeyboardButton(text="Уголовное право", callback_data="ug")
-        grpravo_button = types.InlineKeyboardButton(text="Гражданское право", callback_data="gr")
-        zempravo_button = types.InlineKeyboardButton(text="Земельное право", callback_data="zem")
-        konstpravo_button = types.InlineKeyboardButton(text="Конституционное право", callback_data="konst")
-        sempravo_button = types.InlineKeyboardButton(text="Семейное право", callback_data="sem")
-        nalogpravo_button = types.InlineKeyboardButton(text="Налоговое право", callback_data="nalog")
-        keyboard.add(amdpravo_button, ugpravo_button, grpravo_button, zempravo_button, konstpravo_button,
-                     nalogpravo_button, back_button)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                              text="Выберите часть права по которой хотите узнать информацию", reply_markup=keyboard)
 
-    elif call.data == "doc":
-        keyboard = types.InlineKeyboardMarkup(row_width=2)
-        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        next_button = types.InlineKeyboardButton( text = "Далее", callback_data="next")
-        keyboard.add(next_button,back_button)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                              text="Приступим к выбору документа , который вы хотите оформить", reply_markup=keyboard)
-    elif call.data == "next":
-        keyboard = types.InlineKeyboardMarkup(row_width=1)
-        jaloba_button = types.InlineKeyboardButton(text="Жалоба в суд",callback_data="jaloba")
-        hodat_button = types.InlineKeyboardButton(text="Ходатайство", callback_data="hodat")
-        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        keyboard.add(jaloba_button,hodat_button,back_button)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                              text="Хорошо, тогда давай приступим к оформлению документов. Выберите документ который хотите оформить", reply_markup=keyboard)
-    elif call.data == "cont":
-        keyboard = types.InlineKeyboardMarkup(row_width=2)
-        url_button = types.InlineKeyboardButton(text="VK contact", url="https://vk.com/mirchin")
-        num_button = types.InlineKeyboardButton(text="Number", callback_data= "num")
-        keyboard.add(url_button,num_button,back_button)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                             text="Способы связи с юристом", reply_markup=keyboard)
-    elif call.data="num":
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                             text="Номер РФ +7(977) 340-61-33", reply_markup=keyboard)
-#    elif call.data == "jaloba":
-                                #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                                                #      text="", reply_markup=keyboard)
-#    elif call.data == "hodat":
-        #bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                        #      text="", reply_markup=keyboard)
+    elif call.data == "pravodoc":
+        doc_full()
+        
+@bot.message_handler(content_types=["text"])
+def doc_full(message):
+    doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/shablon.docx")
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    bot.send_message(message.chat.id,"Введите название компании", reply_markup=keyboard)
+    graph1 = message.text
+    #bot.wait
+    bot.send_message(message.chat.id,"Введите адрес компании", reply_markup=keyboard)
+    graph2 = message.text
+    #bot.wait
+    context = { 'emitent' : graph1, 'address1' : graph2, 'участник': 'ООО Участник', 'адрес_участника': 'г. Москва, ул. Полевая, д. 0', 'director': 'И.И. Иванов'}
+    doc.render(context)
+    doc.save("/Users/aleksandrten/Downloads/github/technobot/finalcut.docx")
+
+
 
 
 if __name__ == '__main__':
