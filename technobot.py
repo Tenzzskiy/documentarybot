@@ -31,12 +31,11 @@ def handle_start_help(message):
 def callback_inline(call):
     if call.data == "faq":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
-        qa1_button = types.InlineKeyboardButton(text="Распитие в общественном месте", callback_data="qa1")
+        alim_button = types.InlineKeyboardButton(text="Соглашение об алиментах", callback_data="alim")
         back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        keyboard.add(qa1_button, back_button)
+        keyboard.add(alim_button, back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                              text="❓ Ниже представлен список часто задаваемых вопросов ❓", reply_markup=keyboard)
-        # Уведомление в верхней части экрана
+                              text="❓ Ниже представлен список документо, выберите подходящий раздел по вашей проблеме", reply_markup=keyboard)
         bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Cписок задаваемых вопросов!")
     elif call.data == "back":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -48,6 +47,13 @@ def callback_inline(call):
         keyboard.add(faq_button, konsultation_button, pravodoc_button, business_button, about_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
                               text="Добро пожаловать!👋 \nЯ Юрист Ассистент, а ниже представлены команды, которые я могу выполнять 🤖",
+                              reply_markup=keyboard)
+    elif call.data =="alim":
+        keyboard = types.InlineKeyboardMarkup(row_width=1)
+        back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
+        keyboard.add(back_button)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+                              text="Для составления документа напишите команду '/doc '",
                               reply_markup=keyboard)
     elif call.data == "about":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -71,9 +77,7 @@ def callback_inline(call):
         keyboard.add(consult_button,dogovor_button,gr_button,adm_button,home_button,spor_button,back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Разборы правовых ситуаций"
         ,reply_markup=keyboard)
-    elif call.data =="gr":
 
-        msg = bot.register_next_step_handler(msg, process_name_step)
 
     elif call.data=="consultation":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -95,17 +99,45 @@ def callback_inline(call):
 @bot.message_handler(content_types=['text'])
 def start(message):
     if message.text == '/doc':
-        bot.send_message(message.from_user.id, "Введите название компании")
+        global graph1
+        bot.send_message(message.from_user.id, "Введите ваше ФИО в формате: Александров Александр Александрович")
         bot.register_next_step_handler(message, get_1)
     else:
-        bot.send_message(message.from_user.id, 'Напиши /doc')
-
+        bot.send_message(message.from_user.id, 'Соглашение об алиментах "/doc"')
 def get_1(message):
-    global graph1
+    global FIO1
+    bot.send_message(message.from_user.id, 'Введите номер и серию паспорта в формате : 4615 123456')
+    bot.register_next_step_handler(message, get_2)
+    FIO1 = message.text
+def get_2(message):
+    global pass1
+    bot.send_message(message.from_user.id, 'Введите адрес проживания')
+    bot.register_next_step_handler(message, get_3)
+    pass1 = message.text
+def get_3(message):
+    global adress1
+    bot.send_message(message.from_user.id, 'Введите ФИО плательщика в формате: Александров Александр Александрович')
+    bot.register_next_step_handler(message, get_4)
+    adress1 = message.text
+def get_4(message):
+    global FIO2
+    bot.send_message(message.from_user.id, 'Введите номер и серию паспорта плательщика в формате : 4615 123456')
+    bot.register_next_step_handler(message, get_5)
+    FIO2 = message.text
+def get_5(message):
+    global pass2
+    bot.send_message(message.from_user.id, 'Введите адрес проживания плательщика')
+    bot.register_next_step_handler(message, get_6)
+    pass2 = message.text
+def get_6(message):
+    global adress2
+    bot.send_message(message.from_user.id, 'Чтобы завершить заполнение напишите "Готово"')
+    bot.register_next_step_handler(message, get_final)
+    adress2 = message.text
+def get_final(message):
     bot.send_message(message.from_user.id, 'Ваш готовый файл')
-    graph1 = message.text
     doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/shablon.docx")
-    context = { 'emitent' : graph1  }
+    context = { 'FIO1' : FIO1, 'pass1' : pass1, 'adress1' : adress1, 'FIO2' : FIO2, 'pass2' : pass2, 'adress2' : adress2 }
     doc.render(context)
     doc.save("/Users/aleksandrten/Downloads/github/technobot/finalcut.docx")
     doc = open("/Users/aleksandrten/Downloads/github/technobot/finalcut.docx", "rb")
