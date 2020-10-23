@@ -131,13 +131,56 @@ def get_5(message):
     pass2 = message.text
 def get_6(message):
     global adress2
-    bot.send_message(message.from_user.id, 'Чтобы завершить заполнение напишите "Готово"')
-    bot.register_next_step_handler(message, get_final)
+    bot.send_message(message.from_user.id, 'Кол-во дней для единновременной выплаты после расторжения брака:')
+    bot.register_next_step_handler(message, get_7)
     adress2 = message.text
+def get_7(message):
+    global days1
+    bot.send_message(message.from_user.id, 'Размер единовременной выплаты')
+    bot.register_next_step_handler(message, get_8)
+    days1 = message.text
+def get_8(message):
+    global sum1
+    bot.send_message(message.from_user.id, 'Срок выплаты алиментов(указать срок или пожизненно)')
+    bot.register_next_step_handler(message, get_9)
+    sum1 = message.text
+def get_9(message):
+    global time1
+    bot.send_message(message.from_user.id, 'Укажите размер ежемесячного платежа')
+    bot.register_next_step_handler(message, get_10)
+    time1 = message.text
+def get_10(message):
+    global sum2
+    bot.send_message(message.from_user.id, 'Число месяца до которого вы хотели бы получать выплату')
+    bot.register_next_step_handler(message, get_11)
+    sum2 = message.text
+def get_11(message):
+    global number1
+    bot.send_message(message.from_user.id, 'Введите номер карты на которую хотели бы получать алименты')
+    bot.register_next_step_handler(message, get_12)
+    number1 = message.text
+def get_12(message):
+    global card
+    bot.send_message(message.from_user.id, 'Введите размер пени ,в процентах которые будут начисляться платильщику в случае неуплаты в срок')
+    bot.register_next_step_handler(message, get_13)
+    card = message.text
+def get_13(message):
+    global peni
+    bot.send_message(message.from_user.id, 'Введите нотариус')
+    bot.register_next_step_handler(message, get_14)
+    peni = message.text
+def get_14(message):
+    global notarius
+    bot.send_message(message.from_user.id, 'Чтобы завершить заполнение напишите "Готово"')
+    if message.text=="готово":
+        bot.register_next_step_handler(message, get_final)
+    else :
+        bot.send_message(message.from_user.id,"Введите слово: готово")
+    notarius = message.text
 def get_final(message):
     bot.send_message(message.from_user.id, 'Ваш готовый файл')
     doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/shablon.docx")
-    context = { 'FIO1' : FIO1, 'pass1' : pass1, 'adress1' : adress1, 'FIO2' : FIO2, 'pass2' : pass2, 'adress2' : adress2 }
+    context = { 'FIO1' : FIO1, 'pass1' : pass1, 'adress1' : adress1, 'FIO2' : FIO2, 'pass2' : pass2, 'adress2' : adress2,'days1' : days1,"time1" : time1,'sum1' : sum1,'sum2' : sum2, 'number1' : number1,'card' : card,'peni' : peni,'notarius' : notarius, }
     doc.render(context)
     doc.save("/Users/aleksandrten/Downloads/github/technobot/finalcut.docx")
     doc = open("/Users/aleksandrten/Downloads/github/technobot/finalcut.docx", "rb")
