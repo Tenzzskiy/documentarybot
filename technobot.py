@@ -187,5 +187,6 @@ def get_final(message):
     bot.send_document(message.chat.id, doc)
 
 
+#sosat
 if __name__ == '__main__':
     bot.infinity_polling()
