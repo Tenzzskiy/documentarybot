@@ -172,10 +172,7 @@ def get_13(message):
 def get_14(message):
     global notarius
     bot.send_message(message.from_user.id, 'Чтобы завершить заполнение напишите "Готово"')
-    if message.text=="готово":
-        bot.register_next_step_handler(message, get_final)
-    else :
-        bot.send_message(message.from_user.id,"Введите слово: готово")
+    bot.register_next_step_handler(message, get_final)
     notarius = message.text
 def get_final(message):
     bot.send_message(message.from_user.id, 'Ваш готовый файл')
