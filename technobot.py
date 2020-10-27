@@ -102,22 +102,24 @@ def callback_inline(call):
         keyboard.add(back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Для составления соглашения об алиментах напишите команду '/doc 1'"
         ,reply_markup=keyboard)
-if call.data=="instr"
-def get_final(message):
-        bot.send_message(message.from_user.id, 'Ваш готовый файл')
-        doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
-        doc.save("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
-        doc = open("/Users/aleksandrten/Downloads/github/technobot/instr.docx", "rb")
-        bot.send_document(message.chat.id, doc)
-
+    elif call.data=="instr":
+        keyboard = types.InlineKeyboardMarkup(row_width=1)
+        back_button = types.InlineKeyboardButton(text = "Назад",callback_data="back")
+        keyboard.add(back_button)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Инструкции '/doc 3'"
+        ,reply_markup=keyboard)
 @bot.message_handler(content_types=['text'])
-if call.data=="instr"
-    def get_instr(message):
-        bot.send_message(message.from_user.id, 'Ваш готовый файл')
-        doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
-        doc.save("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
-        doc = open("/Users/aleksandrten/Downloads/github/technobot/instr.docx", "rb")
-        bot.send_document(message.chat.id, doc)
+def start_1(message):
+    if message.text == '/doc 3':
+        bot.register_next_step_handler(message, instr)
+    else:
+        bot.send_message(message.from_user.id, 'Инструкция "/doc 3"')
+def instr(message):
+    bot.send_message(message.from_user.id, 'Ваш готовый файл')
+    doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
+    doc.save("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
+    doc = open("/Users/aleksandrten/Downloads/github/technobot/instr.docx", "rb")
+    bot.send_document(message.chat.id, doc)
 def start(message):
     if message.text == '/doc 1':
         global graph1
