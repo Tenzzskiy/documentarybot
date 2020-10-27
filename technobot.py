@@ -5,12 +5,12 @@ from telegram.ext import CommandHandler;
 from telegram.ext import MessageHandler;
 from telegram.ext import Filters;
 import telebot
-from telebot import types #maxim bog
+from telebot import types
 from docxtpl import DocxTemplate
 
-TG_TOKEN = "957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU"
+TG_TOKEN = ("1358982205:AAHsKJ6Fj9iyYzZItsuFnRGr_ZaLDqfxDQI")
 
-bot = telebot.TeleBot("957294714:AAFJRRACBuGuzUNFPZYMDQhn_mDZBffJwUU")
+bot = telebot.TeleBot("1358982205:AAHsKJ6Fj9iyYzZItsuFnRGr_ZaLDqfxDQI")
 
 
 
@@ -50,11 +50,12 @@ def callback_inline(call):
                               reply_markup=keyboard)
     elif call.data =="alim":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
+        isk_button = types.InlineKeyboardButton(text="Образец иска", callback_data="isk")
+        sogl_button = types.InlineKeyboardButton(text="Образец соглашения об алиментах", callback_data="sogl")
+        instr_button = types.InlineKeyboardButton(text="Инструкция к порядку действий", callback_data="instr")
         back_button = types.InlineKeyboardButton(text="Вернуться назад", callback_data="back")
-        keyboard.add(back_button)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
-                              text="Для составления документа напишите команду '/doc '",
-                              reply_markup=keyboard)
+        keyboard.add(back_button,isk_button,sogl_button,instr_button)
+
     elif call.data == "about":
         keyboard = types.InlineKeyboardMarkup(row_width=1)
         func_button = types.InlineKeyboardButton(text="Что я могу?",callback_data="func")
@@ -95,15 +96,35 @@ def callback_inline(call):
         keyboard.add(reklama_button,sponsor_button,back_button)
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Партнерство"
         ,reply_markup=keyboard)
+    elif call.data=="sogl":
+        keyboard = types.InlineKeyboardMarkup(row_width=1)
+        back_button = types.InlineKeyboardButton(text = "Назад",callback_data="back")
+        keyboard.add(back_button)
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Для составления соглашения об алиментах напишите команду '/doc 1'"
+        ,reply_markup=keyboard)
+if call.data=="instr"
+def get_final(message):
+        bot.send_message(message.from_user.id, 'Ваш готовый файл')
+        doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
+        doc.save("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
+        doc = open("/Users/aleksandrten/Downloads/github/technobot/instr.docx", "rb")
+        bot.send_document(message.chat.id, doc)
 
 @bot.message_handler(content_types=['text'])
+if call.data=="instr"
+    def get_instr(message):
+        bot.send_message(message.from_user.id, 'Ваш готовый файл')
+        doc = DocxTemplate("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
+        doc.save("/Users/aleksandrten/Downloads/github/technobot/instr.docx")
+        doc = open("/Users/aleksandrten/Downloads/github/technobot/instr.docx", "rb")
+        bot.send_document(message.chat.id, doc)
 def start(message):
-    if message.text == '/doc':
+    if message.text == '/doc 1':
         global graph1
         bot.send_message(message.from_user.id, "Введите ваше ФИО в формате: Александров Александр Александрович")
         bot.register_next_step_handler(message, get_1)
     else:
-        bot.send_message(message.from_user.id, 'Соглашение об алиментах "/doc"')
+        bot.send_message(message.from_user.id, 'Соглашение об алиментах "/doc 1"')
 def get_1(message):
     global FIO1
     bot.send_message(message.from_user.id, 'Введите номер и серию паспорта в формате : 4615 123456')
@@ -184,6 +205,6 @@ def get_final(message):
     bot.send_document(message.chat.id, doc)
 
 
-#sosat
+
 if __name__ == '__main__':
     bot.infinity_polling()
